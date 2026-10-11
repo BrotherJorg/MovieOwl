@@ -293,16 +293,16 @@ The Dashboard uses aggregate queries (`COUNT`, `AVG`, `GROUP BY genre`) for the 
 
 ## Screenshots
 ### Dashboard
-<img width="2836" height="1765" alt="Dashboard" src="https://github.com/user-attachments/assets/3a3c0808-ca0f-4368-b707-20a83d960c0a" />
-
+<img width="2381" height="1431" alt="dashboard" src="https://github.com/user-attachments/assets/7666788e-266d-4b92-a6ef-1c27c190e22f" />
 The initial page at startup that displays simplified information, such as total movies, movies per genre, movies watched or watching.
 
 ### Manage Movies
-<img width="2858" height="1780" alt="Manage Movies" src="https://github.com/user-attachments/assets/d08f350d-e9c3-42dc-9630-af8c1d9dc35e" />
+<img width="2380" height="1432" alt="manage" src="https://github.com/user-attachments/assets/443a5e3e-f4ce-454b-bbd6-1e35f0229eb5" />
 The main page where user add, edits and interacts with their collection, searching and filtering options are provide for moderate to large sized collections. It allows sorting in three layers. First is keyword search, Genre and then status which can be combined. Review, status update and favorites button are also in this page.
 
 ### Collections
-<img width="2812" height="1747" alt="Collections" src="https://github.com/user-attachments/assets/fb9c6d0a-ed6f-4432-8c48-b98ea0495123" />
+<img width="2382" height="1440" alt="collections" src="https://github.com/user-attachments/assets/f0db158d-9d15-482c-8508-cb43b4ddaba9" />
+
 The page for user created collections, default collection is "favorites" movies toggled favorites are automatically added here. User can also create their own.
 
 ## Testing
