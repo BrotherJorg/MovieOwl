@@ -22,20 +22,24 @@ MovieOwl solves this problem by packaging a movie record, recommendation, note a
 
 ### Dashboard
 Display current database records and simple statistics in a neat, readable format.
-- Allows the user to see the total number of movies, number of watched, watching, unwatched movies.
-- Displays number of movies per genre and the average rating in the whole collection.
+- Allows the user to see the total number of movies.
+- Allows the user to see the  number of movie watched.
+- Allows the user to see the number of unwatched movies.
+- Display recommended movies.
 - Display dashboard at the start of application.
   
 ### Movie Management
 Display table of movies.
-- Allows adding, editing, viewing details, deleting of movie records.
+- Allows adding of movies.
+- Allows editing of movie details.
+- Allows viewing movie details.
+- Allows deleting of movie records.
 - Allows user keyword searching, filtering by genres, by watch status.
 
 ### Watch status
 Allows tracking of movie watch status.
 - Allows tagging movie as watched.
-- Allows tagging movie as watching
-- Newly added movies tagged as unwatched as default.
+- Allows tagging movie as unwatched
 
 ### Review
 Allows writing personal opinion on a movie entry
@@ -47,7 +51,7 @@ Allows writing personal opinion on a movie entry
 ### Recommendation
 Allows recommendation in two ways, a random movie or through a score.
 - Allows selection of a random movie and displays it’s details.
-- Allows ranked recommendations on recommendation page. 
+- Allows ranked recommendations on dashboard page. 
 - Selects unwatched and highly rated movies in database.
 
 ### User Collection
@@ -55,8 +59,6 @@ Allows user created collections/playlists of movies.
 - Allows creation of custom named collection.
 - Allows adding of movies to one or more collection.
 - A default collection called favorites exits and movie added to favorites are automatically added on it.
-
-
 
 
 ## Technologies used
