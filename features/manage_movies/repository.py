@@ -1,7 +1,10 @@
 from .model import Movie
 from db.database import Database
 
+
 class MovieRepository:
+
+    VALID_STATUSES = ("Unwatched", "Watched")
 
     def __init__(self):
         self.database = Database()
@@ -15,40 +18,33 @@ class MovieRepository:
             WHERE title = ?
         """, (movie.title,))
 
-        existingMovie = cursor.fetchone()
-
-        if existingMovie:
+        if cursor.fetchone():
             return False
-
-        values = (
-            movie.title,
-            movie.genre,
-            movie.year,
-            movie.rating
-        )
 
         cursor.execute("""
             INSERT INTO Movies (title, genre, year, rating)
             VALUES (?, ?, ?, ?)
-        """, values)
+        """, (
+            movie.title,
+            movie.genre,
+            movie.year,
+            movie.rating
+        ))
 
         self.database.connection.commit()
-
         return True
-
 
     def getAll(self):
         cursor = self.database.connection.cursor()
 
         cursor.execute("""
-            SELECT id, title, genre, year, rating, status 
+            SELECT id, title, genre, year, rating, status
             FROM Movies
         """)
 
-        rows = cursor.fetchall()
         movies = []
-         
-        for row in rows:
+
+        for row in cursor.fetchall():
             movie = Movie(
                 row[1],
                 row[2],
@@ -56,12 +52,10 @@ class MovieRepository:
                 row[4],
                 row[0],
                 row[5]
-                )
-
+            )
             movies.append(movie)
-            
+
         return movies
-    
 
     def updateMovie(self, movie):
         cursor = self.database.connection.cursor()
@@ -73,13 +67,12 @@ class MovieRepository:
         """, (
             movie.title,
             movie.genre,
-            movie.year, 
+            movie.year,
             movie.rating,
             movie.id
-        ))   
+        ))
 
         self.database.connection.commit()
-
 
     def deleteMovie(self, movie_id):
         cursor = self.database.connection.cursor()
@@ -91,54 +84,49 @@ class MovieRepository:
 
         self.database.connection.commit()
 
-
     def searchMovies(self, searchText, genre, status):
-            print("SEARCH:", searchText)
-            print("GENRE:", genre)
-            print("STATUS:", status)
-        
-            conditions = []
-            values = []
+        conditions = []
+        values = []
 
-            if searchText:
-                conditions.append("title LIKE ?")
-                values.append(f"%{searchText}%")
+        if searchText:
+            conditions.append("title LIKE ?")
+            values.append(f"%{searchText}%")
 
-            if genre != "All Genres":
-                conditions.append("genre = ?")
-                values.append(genre)
+        if genre != "All Genres":
+            conditions.append("genre = ?")
+            values.append(genre)
 
-            if status != "All status":
-                conditions.append("status = ?")
-                values.append(status)
+        if status != "All status":
+            conditions.append("status = ?")
+            values.append(status)
 
-            query = ("""
-                SELECT id, title, genre, year, rating, status
-                FROM Movies
-            """)
+        query = """
+            SELECT id, title, genre, year, rating, status
+            FROM Movies
+        """
 
-            if conditions:
-                query += " WHERE " + " AND ".join(conditions)
+        if conditions:
+            query += " WHERE " + " AND ".join(conditions)
 
-            cursor = self.database.connection.cursor()
-            cursor.execute(query, values)
+        query += " ORDER BY title"
 
-            rows = cursor.fetchall()
+        cursor = self.database.connection.cursor()
+        cursor.execute(query, values)
 
-            movies = []
-            for row in rows:
-                movie = Movie(
-                    row[1],
-                    row[2],
-                    row[3],
-                    row[4],
-                    row[0],
-                    row[5]
-                )
-                movies.append(movie)
+        movies = []
 
-            return movies
+        for row in cursor.fetchall():
+            movie = Movie(
+                row[1],
+                row[2],
+                row[3],
+                row[4],
+                row[0],
+                row[5]
+            )
+            movies.append(movie)
 
+        return movies
 
     def getGenres(self):
         cursor = self.database.connection.cursor()
@@ -149,17 +137,12 @@ class MovieRepository:
             ORDER BY genre
         """)
 
-        rows = cursor.fetchall()
-
-        genres = []
-
-        for row in rows:
-            genres.append(row[0])
-
-        return genres
-
+        return [row[0] for row in cursor.fetchall()]
 
     def updateStatus(self, movie_id, status):
+        if status not in self.VALID_STATUSES:
+            return False
+
         cursor = self.database.connection.cursor()
 
         cursor.execute("""
@@ -169,3 +152,4 @@ class MovieRepository:
         """, (status, movie_id))
 
         self.database.connection.commit()
+        return cursor.rowcount > 0

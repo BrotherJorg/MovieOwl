@@ -1,142 +1,101 @@
+
 import sys
 
 from PyQt6.QtGui import QFont, QFontDatabase
-
 from PyQt6.QtWidgets import QApplication
 
 from features.main_Window.view import MainWindow
 
 from features.manage_movies.repository import MovieRepository
-
 from features.manage_movies.service import MovieService
-
 from features.manage_movies.view import ManageMoviesView
 
-
+from features.review_notes.repository import ReviewNotesRepository
 from features.review_notes.service import ReviewNotesService
 
-from features.review_notes.repository import ReviewNotesRepository
-
 from features.dashboard.repository import DashboardRepository
-
 from features.dashboard.service import DashboardService
-
-from features.movie_picker.repository import MoviePickerRepository
-
-from features.movie_picker.service import MoviePickerService
-
-from features.recommendations.repository import RecommendationRepository
-
-from features.recommendations.service import RecommendationService
-
 from features.dashboard.view import DashboardView
 
+from features.movie_picker.repository import MoviePickerRepository
+from features.movie_picker.service import MoviePickerService
 from features.movie_picker.view import MoviePickerView
 
-from features.recommendations.view import RecommendationsView
-
+from features.recommendations.repository import RecommendationRepository
+from features.recommendations.service import RecommendationService
 
 from features.collections.repository import CollectionRepository
-
 from features.collections.service import CollectionService
-
 from features.collections.view import CollectionsView
 
-from features.favorites.service import FavoritesService
-from features.favorites.view import FavoritesView
 
+# Movie management
+movieRepository = MovieRepository()
+movieService = MovieService(movieRepository)
 
-repository = MovieRepository()
-
-service = MovieService(repository)  
-
-
+# Review notes
 reviewNotesRepository = ReviewNotesRepository()
-
 reviewNotesService = ReviewNotesService(reviewNotesRepository)
 
+# Dashboard
 dashboardRepository = DashboardRepository()
-
 dashboardService = DashboardService(dashboardRepository)
 
-
+# Movie picker
 moviePickerRepository = MoviePickerRepository()
-
 moviePickerService = MoviePickerService(moviePickerRepository)
 
+# Recommendations
 recommendationRepository = RecommendationRepository()
+recommendationService = RecommendationService(recommendationRepository)
 
-recommendationService = RecommendationService(  recommendationRepository)
-
+# Collections
 collectionRepository = CollectionRepository()
-
 collectionService = CollectionService(collectionRepository)
 
-favoritesService = FavoritesService( collectionService)
 
+# Application
 app = QApplication(sys.argv)
 
 fontId = QFontDatabase.addApplicationFont(
-
     "assets/fonts/static/manrope-latin-400-normal.ttf"
-
 )
 
 if fontId != -1:
-
     fontFamily = QFontDatabase.applicationFontFamilies(fontId)[0]
-
     app.setFont(QFont(fontFamily, 10))
 
-with open("styles/main.qss", "r") as file:
+with open("styles/main.qss", "r", encoding="utf-8") as file:
+    app.setStyleSheet(file.read())
 
-   app.setStyleSheet(file.read())
 
+# Views
 manageMoviesView = ManageMoviesView(
-
-    service,
-
+    movieService,
     reviewNotesService,
-    favoritesService
-
+    collectionService
 )
 
-dashboardView = DashboardView(dashboardService)
+dashboardView = DashboardView(
+    dashboardService,
+    recommendationService
+)
 
 moviePickerView = MoviePickerView(moviePickerService)
-
-recommendationsView = RecommendationsView(recommendationService)
-
 collectionsView = CollectionsView(collectionService)
 
-favoritesView = FavoritesView( favoritesService)
 
-manageMoviesView.movieChanged.connect(
-    dashboardView.refresh
-)
-
-manageMoviesView.movieChanged.connect(
-    recommendationsView.refresh
-)
-
-manageMoviesView.movieChanged.connect(
-    favoritesView.refresh
-)
+# Synchronize views when movies change
+manageMoviesView.movieChanged.connect(dashboardView.refresh)
+manageMoviesView.movieChanged.connect(collectionsView.refresh)
 
 
+# Main window
 window = MainWindow(
-
     manageMoviesView,
-
     dashboardView,
-
     moviePickerView,
-
-    recommendationsView,
-
-    collectionsView,
-    favoritesView
-
+    collectionsView
 )
 
 window.show()

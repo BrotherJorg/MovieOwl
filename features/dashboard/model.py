@@ -3,7 +3,6 @@ class DashboardStats:
         self,
         totalMovies,
         watched,
-        watching,
         unwatched,
         averageRating,
         genreCounts
@@ -11,7 +10,6 @@ class DashboardStats:
 
         self.totalMovies = totalMovies
         self.watched = watched
-        self.watching = watching
         self.unwatched = unwatched
         self.averageRating = averageRating
         self.genreCounts = genreCounts

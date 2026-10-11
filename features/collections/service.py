@@ -7,53 +7,43 @@ class CollectionService:
         self.repository = repository
 
     def createCollection(self, name):
-        name = name.strip()
-
-        if not name:
+        if not name or not name.strip():
             return False
 
-        self.repository.createCollection(name)
-
-        return True
+        return self.repository.createCollection(name.strip())
 
     def getAllCollections(self):
         return self.repository.getAllCollections()
 
     def getCollectionByName(self, name):
+        if not name:
+            return None
 
-        collections = self.repository.getAllCollections()
+        targetName = name.strip().casefold()
 
-        for collection in collections:
-
-            if collection[1] == name:
+        for collection in self.getAllCollections():
+            if collection[1].casefold() == targetName:
                 return collection
 
         return None
 
     def deleteCollection(self, collection_id):
-        self.repository.deleteCollection(collection_id)
+        return self.repository.deleteCollection(collection_id)
 
     def addMovieToCollection(self, movie_id, collection_id):
-        self.repository.addMovieToCollection(
+        return self.repository.addMovieToCollection(
             movie_id,
             collection_id
         )
 
-    def removeMovieFromCollection(
-        self,
-        movie_id,
-        collection_id
-    ):
-        self.repository.removeMovieFromCollection(
+    def removeMovieFromCollection(self, movie_id, collection_id):
+        return self.repository.removeMovieFromCollection(
             movie_id,
             collection_id
         )
 
     def getMoviesInCollection(self, collection_id):
-        return self.repository.getMoviesInCollection(
-            collection_id
-        )
+        return self.repository.getMoviesInCollection(collection_id)
 
     def getAllMovies(self):
         return self.repository.getAllMovies()
-
