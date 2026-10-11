@@ -16,7 +16,11 @@ class MovieService:
         self.repository.deleteMovie(movie_id)
 
     def searchMovies(self, searchText, genre, status):
-        return self.repository.searchMovies(searchText, genre, status)
+        return self.repository.searchMovies(
+            searchText,
+            genre,
+            status
+        )
 
     def getGenres(self):
         return self.repository.getGenres()
@@ -24,11 +28,11 @@ class MovieService:
     def updateStatus(self, movie_id, status):
         validStatuses = [
             "Unwatched",
-            "Watching",
             "Watched"
         ]
 
         if status not in validStatuses:
-            return
+            return False
 
         self.repository.updateStatus(movie_id, status)
+        return True
